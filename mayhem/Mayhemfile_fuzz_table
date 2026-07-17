@@ -1,0 +1,9 @@
+project: savantenvs/rabbitmq-c
+target: fuzz_table
+cmds:
+  - cmd: /mayhem/fuzz_table
+    libfuzzer: true
+    dictionary: /mayhem/mayhem/fuzz_table.dict
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/fuzz_table/testsuite
