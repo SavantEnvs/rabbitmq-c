@@ -1,0 +1,15 @@
+# origin: https://app.mayhem.security/mayhemheroes/rabbitmq-c/fuzz-server/3
+# note: defect #3409195 in this run is a harness artifact, not an application bug —
+#   fuzzinit() in fuzz/fuzz_server.c (upstream, unmodified) binds a hardcoded port
+#   (5672) and fails with EADDRINUSE when a prior replay's socket is still lingering
+#   under concurrent/repeated runs. First frame is fuzzinit(), not library code.
+#   Excluded from the R7 relevant-defect count; the genuine reproduced defect is the
+#   amqp_decode_properties shift-32 UBSan bug (librabbitmq/amqp_framing.c:1422:43).
+project: savantenvs/rabbitmq-c
+target: fuzz-server-buggy-mhh-run-3
+cmds:
+  - cmd: /mayhem/fuzz_server
+    libfuzzer: true
+    dictionary: /mayhem/mayhem/fuzz_server.dict
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
